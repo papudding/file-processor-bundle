@@ -3,8 +3,8 @@
 ## 项目概述
 
 `file-processor-bundle` 是一个高效的文件处理工具包，提供了一系列便捷的文件操作功能，包括文件合并、分割、格式转换等。
-<img width="500" alt="image" src="https://github.com/user-attachments/assets/d9bfbba9-7fb9-4293-b93d-d98615a2f462" />
-<img width="500" alt="image" src="https://github.com/user-attachments/assets/9f0248af-6beb-4701-b88a-6a0ada16f9c5" />
+<img width="450" alt="image" src="https://github.com/user-attachments/assets/d9bfbba9-7fb9-4293-b93d-d98615a2f462" />
+<img width="450" alt="image" src="https://github.com/user-attachments/assets/9f0248af-6beb-4701-b88a-6a0ada16f9c5" />
 
 ## 主要功能
 
