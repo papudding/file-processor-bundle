@@ -34,6 +34,14 @@ export const pagesRoutes: RouteRecordRaw[] = [
           icon: markRaw(Paperclip),
           title: '文件拆分'
         }
+      },
+      {
+        path: '/content-process',
+        component: () => import('./pages/FileContentProcess/FileContentProcess.vue'),
+        meta: {
+          icon: markRaw(Document),
+          title: '文件内容处理'
+        }
       }
     ]
   },
