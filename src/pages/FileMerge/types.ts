@@ -1,7 +1,7 @@
 export interface FileMergeParam {
   filePaths: string,
   outputDir: string,
-  outPutFileName: string,
+  outputFileName: string,
   parallel: boolean,
 }
 export interface MergeProgressUpdateEvent {

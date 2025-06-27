@@ -20,7 +20,7 @@ onMounted(() => {
   fileMergeForm.value = {
     filePaths: '',
     outputDir: '',
-    outPutFileName: '',
+    outputFileName: '',
     parallel: false,
   }
 })
@@ -41,7 +41,7 @@ const changeStepActive = (step: number) => {
 const fileMergeForm = ref<FileMergeParam>({
   filePaths: '',
   outputDir: '',
-  outPutFileName: '',
+  outputFileName: '',
   parallel: false,
 })
 
@@ -56,7 +56,7 @@ const mergeFile = async ()=> {
     await invoke('file_merge', {
       filePaths: fileMergeForm.value.filePaths,
       outputDir: fileMergeForm.value.outputDir,
-      outPutFileName: fileMergeForm.value.outPutFileName,
+      outputFileName: fileMergeForm.value.outputFileName,
       parallel: fileMergeForm.value.parallel,
     })
     activities.value.push({

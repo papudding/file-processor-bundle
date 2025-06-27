@@ -12,7 +12,7 @@ const fileMergeForm = defineModel<FileMergeParam>('fileMergeForm', {
   default: () => ({
     filePaths: '',
     outputDir: '',
-    outPutFileName: '',
+    outputFileName: '',
     parallel: false,
   })
 })
@@ -84,7 +84,7 @@ const selectDir = async () => {
     </el-form-item>
     <el-row>
       <el-col :span="12">
-        <el-form-item prop="outPutFileName">
+        <el-form-item prop="outputFileName">
           <template #label>
             <span>合并后的文件名
               <el-icon>
@@ -94,7 +94,7 @@ const selectDir = async () => {
               </el-icon>
             </span>
           </template>
-          <el-input v-model="fileMergeForm.outPutFileName" placeholder="请输入合并后的文件名" />
+          <el-input v-model="fileMergeForm.outputFileName" placeholder="请输入合并后的文件名" />
         </el-form-item>
       </el-col>
       <el-col :span="11" :offset="1">

@@ -13,16 +13,16 @@ const CHUNK_SIZE: usize = 1024 * 1024; // 1MB chunks
 pub async fn file_merge(
     file_paths: &str,
     output_dir: &str,
-    out_put_file_name: &str,
+    output_file_name: &str,
     parallel: bool,
     window: Window,
 ) -> Result<(), Error> {
     // 获取输出文件
     let output_dir = Path::new(output_dir);
-    let output_path = if out_put_file_name.is_empty() {
+    let output_path = if output_file_name.is_empty() {
         output_dir.join("bundle.txt")
     } else {
-        output_dir.join(out_put_file_name)
+        output_dir.join(output_file_name)
     };
     // 输入文件集合
     let in_files: Vec<&str> = file_paths.split(',').collect();
