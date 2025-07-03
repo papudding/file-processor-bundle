@@ -1151,6 +1151,7 @@ name = "file-processor-bundle"
 version = "0.1.0"
 dependencies = [
  "rayon",
+ "regex",
  "serde",
  "serde_json",
  "tauri",

@@ -49,6 +49,7 @@ const activities = ref<Activity[]>([])
 
 // 拆分文件
 const splitFile = async () => {
+  activities.value = []
   stepActive.value = 3
   // 获取文件行数
   activities.value.push({

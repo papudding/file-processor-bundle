@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { FileContentProcessParam } from './types'
 import { open } from '@tauri-apps/plugin-dialog'
 // import { ElNotification } from 'element-plus'
@@ -16,6 +16,7 @@ const fileContentProcessForm = defineModel<FileContentProcessParam>('fileContent
     regex: false,
     isReplace: false,
     replaceString: '',
+    parallel: false,
   })
 })
 const fileNames = ref<string>('')
@@ -25,6 +26,9 @@ const fileContentProcessFormRules = ref({
   ],
   outputDir: [
     { required: true, message: '请选择输出目录', trigger: 'blur' },
+  ],
+  searchString: [
+    { required: true, message: '请输入搜索/替换字符串', trigger: 'blur' },
   ],
 })
 
@@ -39,18 +43,32 @@ const selectFile = async () => {
   if (files && files.length) {
     fileNames.value = files.map((file) => file.split(/[\\/]/).pop() || '').join('\n')
     fileContentProcessForm.value.filePaths = files.join(',')
-    emit('changeStepActive', 2)
+    emit('changeStepActive', 1)
   }
 }
 // 选择目录
 const selectDir = async () => {
-  // const file = await open({
-  //   multiple: false,
-  //   directory: true,
-  // })
+  const file = await open({
+    multiple: false,
+    directory: true,
+  })
   // 处理 file 可能为 null 的情况，若为 null 则赋值为空字符串
-  // fileContentProcessForm.value.outputDir = file || ''
+  fileContentProcessForm.value.outputDir = file || ''
+  emit('changeStepActive', 2)
 }
+
+const selectDirButtonDisableCalc = computed(() => {
+  return fileContentProcessForm.value.filePaths === ''
+})
+
+const searchStringDisableCalc = computed(() => {
+  return fileContentProcessForm.value.filePaths === ''
+    || fileContentProcessForm.value.outputDir === ''
+})
+
+const replaceStringDisableCalc = computed(() => {
+  return fileContentProcessForm.value.searchString === ''
+})
 </script>
 <template>
   <el-form style="min-width: 330px;" label-position="top" :model="fileContentProcessForm"
@@ -70,17 +88,34 @@ const selectDir = async () => {
     <el-form-item :label="fileContentProcessForm.isReplace ? '替换后输出的文件路径' : '搜索结果保存的文件路径'" prop="outputDir">
       <el-row>
         <el-col :span="19">
-          <el-input readonly v-model="fileContentProcessForm.outputDir" placeholder="点击按钮选择输出路径" />
+          <el-input :disabled="selectDirButtonDisableCalc" readonly v-model="fileContentProcessForm.outputDir" placeholder="点击按钮选择输出路径" />
         </el-col>
         <el-col :span="4" :offset="1">
-          <el-button type="primary" @click="selectDir">选择输出</el-button>
+          <el-button :disabled="selectDirButtonDisableCalc" type="primary" @click="selectDir">选择输出</el-button>
         </el-col>
       </el-row>
     </el-form-item>
     <el-row>
       <el-col :span="12">
         <el-form-item :label="fileContentProcessForm.isReplace ? '要替换的字符串' : '要搜索的字符串'" prop="searchString">
-          <el-input v-model="fileContentProcessForm.searchString" placeholder="请输入合并后的文件名" />
+          <template #label>
+            <div v-if="!fileContentProcessForm.isReplace" style="display: inline-block;">
+              要搜索的字符串
+              <el-icon>
+                <el-tooltip placement="bottom" content="多个值时，用换行符隔开">
+                  <InfoFilled />
+                </el-tooltip>
+              </el-icon>
+            </div>
+            <div v-else style="display: inline-block;">
+              要替换的字符串
+            </div>
+          </template>
+          <el-input v-if="!fileContentProcessForm.isReplace" :type="fileContentProcessForm.regex ? 'text' : 'textarea'"
+            :autosize="{ minRows: 2, maxRows: 3 }" v-model="fileContentProcessForm.searchString"
+            placeholder="请输入要搜索的字符串" :disabled="searchStringDisableCalc" />
+          <el-input v-else v-model="fileContentProcessForm.searchString" placeholder="请输入要替换的字符串"
+            :disabled="searchStringDisableCalc" />
         </el-form-item>
       </el-col>
       <el-col :span="11" :offset="1">
@@ -106,11 +141,21 @@ const selectDir = async () => {
               </el-icon>
             </el-form-item>
           </div>
+          <div v-if="!fileContentProcessForm.isReplace" class="control-check">
+            <el-form-item prop="parallel">
+              <el-checkbox v-model="fileContentProcessForm.parallel" label="并行处理" />
+              <el-icon>
+                <el-tooltip placement="bottom" content="勾选后，会将文件加载进内存中按行并行处理，⚠️注意文件大小导致的内存占用情况">
+                  <InfoFilled />
+                </el-tooltip>
+              </el-icon>
+            </el-form-item>
+          </div>
         </div>
       </el-col>
     </el-row>
     <el-form-item v-if="fileContentProcessForm.isReplace" label="替换内容" prop="replaceString">
-      <el-input v-model="fileContentProcessForm.replaceString" placeholder="请输入替换后的字符串" />
+      <el-input :disabled="replaceStringDisableCalc" v-model="fileContentProcessForm.replaceString" placeholder="请输入替换后的字符串" />
     </el-form-item>
   </el-form>
 </template>
@@ -120,7 +165,8 @@ const selectDir = async () => {
   flex-direction: column;
   gap: 1px;
 }
+
 .control-check {
-  height: 30px;
+  height: 25px;
 }
 </style>

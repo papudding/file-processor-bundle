@@ -1,7 +1,10 @@
+mod config;
 mod error;
+mod file_content_process;
 mod file_merge;
 mod file_split;
 mod progress_payload;
+use file_content_process::{file_search, file_replace};
 use file_merge::file_merge;
 use file_split::{file_split, get_line_count};
 
@@ -30,7 +33,9 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             file_split,
             get_line_count,
-            file_merge
+            file_merge,
+            file_search,
+            file_replace,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

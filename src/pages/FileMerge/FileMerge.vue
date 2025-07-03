@@ -46,10 +46,11 @@ const fileMergeForm = ref<FileMergeParam>({
 })
 
 const mergeFile = async ()=> {
+  activities.value = []
   stepActive.value = 3
   // 获取文件行数
   activities.value.push({
-    content: '开始获取待合并行数',
+    content: '开始合并',
     timestamp: new Date().toLocaleString(),
   })
   try {

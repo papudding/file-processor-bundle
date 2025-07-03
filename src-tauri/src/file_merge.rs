@@ -1,3 +1,4 @@
+use crate::config::CHUNK_SIZE;
 use crate::error::Error;
 use crate::progress_payload::ProgressPayload;
 use rayon::prelude::*;
@@ -6,8 +7,6 @@ use std::io::{Read, Write};
 use std::path::Path;
 use std::sync::Mutex;
 use tauri::{Emitter, Window};
-
-const CHUNK_SIZE: usize = 1024 * 1024; // 1MB chunks
 
 #[tauri::command]
 pub async fn file_merge(
